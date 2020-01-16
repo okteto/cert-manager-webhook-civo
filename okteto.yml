@@ -1,0 +1,10 @@
+name: certmanager-civo
+labels:
+  app.kubernetes.io/name: certmanager-civo
+  app.kubernetes.io/component: webhook
+image: okteto/golang:1
+command:
+- bash
+volumes:
+  - /go/pkg/
+  - /root/.cache/go-build/

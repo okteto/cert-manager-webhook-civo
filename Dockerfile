@@ -20,4 +20,4 @@ RUN apk update \
 
 COPY --from=builder /app/webhook /app/webhook
 EXPOSE 443
-CMD ["/app/webhook"]
+ENTRYPOINT ["/app/webhook"]

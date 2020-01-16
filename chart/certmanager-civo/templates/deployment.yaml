@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "certmanager-civo.fullname" . }}
   labels:
+    app.kubernetes.io/component: webhook
     {{- include "certmanager-civo.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -36,13 +37,13 @@ spec:
           livenessProbe:
             httpGet:
               scheme: HTTPS
-              path: /
-              port: http
+              path: /healthz
+              port: https
           readinessProbe:
             httpGet:
               scheme: HTTPS
-              path: /
-              port: http
+              path: /healthz
+              port: https
           volumeMounts:
             - name: certs
               mountPath: /tls
