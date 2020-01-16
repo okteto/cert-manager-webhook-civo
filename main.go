@@ -18,7 +18,7 @@ import (
 	"k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 
-	"github.com/jetstack/cert-manager/pkg/util"
+	"github.com/jetstack/cert-manager/pkg/issuer/acme/dns/util"
 )
 
 func main() {
@@ -67,7 +67,7 @@ func (c *civoDNSProviderSolver) Present(ch *whapi.ChallengeRequest) error {
 
 	rn := extractRecordName(ch.ResolvedFQDN, dnsZone)
 
-	_, err = d.NewRecord(c, rn, ch.Key, dns.TXT, 10, 600)
+	_, err = d.NewRecord(client, dns.TXT, rn, ch.Key, 10, 600)
 	if err != nil {
 		return err
 	}
