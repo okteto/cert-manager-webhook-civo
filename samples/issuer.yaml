@@ -4,7 +4,7 @@ metadata:
   name: civoissuer
 spec:
   acme:
-    email: rberrelleza@gmail.com
+    email: example@example.com
     privateKeySecretRef:
       name: civio-okteto-enterprise-letsencrypt
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -16,4 +16,4 @@ spec:
           config:
             apiKeySecretRef:
               key: key
-              name: okteto-dns
+              name: dns

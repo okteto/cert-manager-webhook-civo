@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   dnsNames:
-  - '*.civo.okteto.net'
+  - '*.example.com'
   issuerRef:
     kind: Issuer
     name: civoissuer

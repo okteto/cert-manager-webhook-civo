@@ -1,6 +1,6 @@
 # Civo ACME DNS Webhook
 
-Cert Manager Civo Webhook performing ACME challenge using DNS record
+An ACME Webhook solver for CIVO
 
 ## Installation
 
@@ -12,7 +12,7 @@ $ helm install civo chart/civo-acme --namespace cert-manager
 
 ## Secret
 ```
-kubectl create secret generic=
+kubectl create secret generic dns --from-literal=key=<YOUR_CIVO_TOKEN>
 ```
 
 # Issuer
@@ -35,7 +35,7 @@ spec:
           config:
             apiKeySecretRef:
               key: key
-              name: okteto-dns
+              name: dns
 ```
 
 ## Certificate
@@ -52,3 +52,11 @@ spec:
     name: civo
   secretName: wildcard-example-com-tls
 ```
+
+# Contributing
+If you want to get involved, we'd love to receive a pull request, issues, or an offer to help over at the [Civo](https://app.slack.com/client/TKW8H5MBK/CMVCKMCN5) or [Kubernetes](https://kubernetes.slack.com/messages/CM1QMQGS0/) Slacks.
+
+Maintainers:
+- [Ramiro Berrelleza](https://twitter.com/rberrelleza)
+
+Please see the [contribution guidelines](CONTRIBUTING.md)
