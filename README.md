@@ -1,6 +1,6 @@
 # Civo ACME DNS Webhook
 
-An ACME Webhook solver for CIVO
+An ACME Webhook solver for [CIVO](https://civo.com)
 
 ## Installation
 
@@ -54,9 +54,10 @@ spec:
 ```
 
 # Contributing
-If you want to get involved, we'd love to receive a pull request, issues, or an offer to help over at the [Civo](https://app.slack.com/client/TKW8H5MBK/CMVCKMCN5) or [Kubernetes](https://kubernetes.slack.com/messages/CM1QMQGS0/) Slacks.
+If you want to get involved, we'd love to receive a pull request, issues, or an offer to help over at the [#KUBE100](https://app.slack.com/client/TKW8H5MBK/CMVCKMCN5) channel in the Civo-Community slack or at the [#Okteto](https://kubernetes.slack.com/messages/CM1QMQGS0/) channel in the Kubernetes slack.
 
 Maintainers:
 - [Ramiro Berrelleza](https://twitter.com/rberrelleza)
+- [Pablo Chico de Guzman](https://twitter.com/pchico83)
 
 Please see the [contribution guidelines](CONTRIBUTING.md)
