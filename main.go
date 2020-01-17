@@ -17,8 +17,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
-
-	"github.com/jetstack/cert-manager/pkg/issuer/acme/dns/util"
 )
 
 func main() {
@@ -51,59 +49,55 @@ func (c *civoDNSProviderSolver) Initialize(kubeClientConfig *restclient.Config, 
 }
 
 func (c *civoDNSProviderSolver) Present(ch *whapi.ChallengeRequest) error {
+	fmt.Printf("Presenting challenge for fqdn=%s zone=%s\n", ch.ResolvedFQDN, ch.ResolvedZone)
 	client, err := c.newClientFromConfig(ch)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Decoded client")
-
-	dnsZone := util.UnFqdn(ch.ResolvedZone)
-	d, err := dns.GetDomain(client, dnsZone)
+	rn, domain := extractNames(ch.ResolvedFQDN)
+	d, err := dns.GetDomain(client, domain)
 	if err != nil {
-		fmt.Printf("Get domain %s error: %s", dnsZone, err)
+		fmt.Printf("Get domain %s error: %s\n", domain, err)
 		return err
 	}
-
-	rn := extractRecordName(ch.ResolvedFQDN, dnsZone)
 
 	_, err = d.NewRecord(client, dns.TXT, rn, ch.Key, 10, 600)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Presented txt record %s", ch.ResolvedFQDN)
+	fmt.Printf("Presented txt record for fqdn=%s zone=%s\n", ch.ResolvedFQDN, ch.ResolvedZone)
 	return nil
 }
 
 func (c *civoDNSProviderSolver) CleanUp(ch *whapi.ChallengeRequest) error {
+	fmt.Printf("Cleaning up for fqdn=%s\n", ch.ResolvedFQDN)
 	client, err := c.newClientFromConfig(ch)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Decoded client")
-	dnsZone := util.UnFqdn(ch.ResolvedZone)
-	d, err := dns.GetDomain(client, dnsZone)
+	rn, domain := extractNames(ch.ResolvedFQDN)
+	d, err := dns.GetDomain(client, domain)
 	if err != nil {
-		fmt.Printf("Get domain %s error: %s", dnsZone, err)
+		fmt.Printf("Get domain %s error: %s\n", domain, err)
 		return err
 	}
 
-	rn := extractRecordName(ch.ResolvedFQDN, dnsZone)
 	r, err := d.GetRecord(client, rn)
 	if err != nil {
-		fmt.Printf("Get record %s error: %s", rn, err)
+		fmt.Printf("Get record %s error: %s\n", rn, err)
 		return err
 	}
 
 	if r.Value != ch.Key {
-		fmt.Printf("Records value does not match: %v", ch.ResolvedFQDN)
+		fmt.Printf("Records value does not match: %v\n", ch.ResolvedFQDN)
 		return errors.New("record value does not match")
 	}
 
 	if err := r.Delete(client); err != nil {
-		fmt.Printf("Delete record %s error: %s", r.Name, err)
+		fmt.Printf("Deleted record %s error: %s\n", r.Name, err)
 	}
 
 	return nil
@@ -137,7 +131,6 @@ func (c *civoDNSProviderSolver) loadConfig(ch *whapi.ChallengeRequest) (*civoDNS
 		return cfg, fmt.Errorf("error decoding solver config: %v", err)
 	}
 
-	fmt.Printf("Deleted txt record %s", ch.ResolvedFQDN)
 	return cfg, nil
 }
 
@@ -154,10 +147,10 @@ func (c *civoDNSProviderSolver) getSecretData(selector certmgrv1.SecretKeySelect
 	return "", fmt.Errorf("no key %s in secret %s/%s", selector.Key, ns, selector.Name)
 }
 
-func extractRecordName(fqdn, domain string) string {
-	name := util.UnFqdn(fqdn)
-	if idx := strings.Index(name, "."+domain); idx != -1 {
-		return name[:idx]
-	}
-	return name
+func extractNames(fqdn string) (string, string) {
+	p := strings.Split(fqdn, ".")
+	record := p[0]
+	zone := strings.Join(p[1:], ".")
+	zone = strings.TrimSuffix(zone, ".")
+	return record, zone
 }
