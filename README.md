@@ -1,6 +1,6 @@
-# Civo ACME DNS Webhook
+# CIVO DNS webhook for cert-manager
 
-An ACME Webhook solver for [CIVO](https://civo.com)
+A webhook to use [CIVO DNS](https://civo.com) as a DNS issuer for [cert-manager](https://github.com/jetstack/cert-manager).
 
 ## Installation
 
