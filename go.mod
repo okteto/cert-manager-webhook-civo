@@ -1,4 +1,4 @@
-module github.com/okteto/certmanager-civo
+module github.com/okteto/civo-acme
 
 go 1.13
 

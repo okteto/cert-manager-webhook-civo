@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "certmanager-civo.fullname" . }}
+  name: {{ include "civo-acme.fullname" . }}
   labels:
     app.kubernetes.io/component: webhook
-    {{- include "certmanager-civo.labels" . | nindent 4 }}
+    {{- include "civo-acme.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "certmanager-civo.selectorLabels" . | nindent 6 }}
+      {{- include "civo-acme.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "certmanager-civo.selectorLabels" . | nindent 8 }}
+        {{- include "civo-acme.selectorLabels" . | nindent 8 }}
     spec:
-      serviceAccountName: {{ include "certmanager-civo.serviceAccountName" . }}
+      serviceAccountName: {{ include "civo-acme.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
@@ -53,7 +53,7 @@ spec:
       volumes:
         - name: certs
           secret:
-            secretName: {{ include "certmanager-civo.servingCertificate" . }}
+            secretName: {{ include "civo-acme.servingCertificate" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

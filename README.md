@@ -5,7 +5,7 @@ Cert Manager Civo Webhook performing ACME challenge using DNS record
 ## Installation
 
 ```
-$ helm install civo chart/certmanager-civo --namespace cert-manager
+$ helm install civo chart/civo-acme --namespace cert-manager
 ```
 
 # How to Use

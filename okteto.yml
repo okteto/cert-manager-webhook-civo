@@ -1,6 +1,6 @@
-name: certmanager-civo
+name: civo-acme
 labels:
-  app.kubernetes.io/name: certmanager-civo
+  app.kubernetes.io/name: civo-acme
   app.kubernetes.io/component: webhook
 image: okteto/golang:1
 command:

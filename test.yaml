@@ -1,2 +1,7 @@
 image:
   repository: ramiro/civo-webhook
+  pullPolicy: Always
+
+certManager:
+  namespace: default
+  serviceAccountName: civio-cert-manager

@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "certmanager-civo.name" -}}
+{{- define "civo-acme.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "certmanager-civo.fullname" -}}
+{{- define "civo-acme.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,16 +27,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "certmanager-civo.chart" -}}
+{{- define "civo-acme.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
-{{- define "certmanager-civo.labels" -}}
-helm.sh/chart: {{ include "certmanager-civo.chart" . }}
-{{ include "certmanager-civo.selectorLabels" . }}
+{{- define "civo-acme.labels" -}}
+helm.sh/chart: {{ include "civo-acme.chart" . }}
+{{ include "civo-acme.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -46,35 +46,35 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "certmanager-civo.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "certmanager-civo.name" . }}
+{{- define "civo-acme.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "civo-acme.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "certmanager-civo.serviceAccountName" -}}
+{{- define "civo-acme.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "certmanager-civo.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "civo-acme.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
-{{- define "certmanager-civo.rootCAIssuer" -}}
-{{ printf "%s-ca" (include "certmanager-civo.fullname" .) }}
+{{- define "civo-acme.rootCAIssuer" -}}
+{{ printf "%s-ca" (include "civo-acme.fullname" .) }}
 {{- end -}}
 
-{{- define "certmanager-civo.rootCACertificate" -}}
-{{ printf "%s-ca" (include "certmanager-civo.fullname" .) }}
+{{- define "civo-acme.rootCACertificate" -}}
+{{ printf "%s-ca" (include "civo-acme.fullname" .) }}
 {{- end -}}
 
-{{- define "certmanager-civo.servingCertificate" -}}
-{{ printf "%s-webhook-tls" (include "certmanager-civo.fullname" .) }}
+{{- define "civo-acme.servingCertificate" -}}
+{{ printf "%s-webhook-tls" (include "civo-acme.fullname" .) }}
 {{- end -}}
 
-{{- define "certmanager-civo.selfSignedIssuer" -}}
-{{ printf "%s-selfsign" (include "certmanager-civo.fullname" .) }}
+{{- define "civo-acme.selfSignedIssuer" -}}
+{{ printf "%s-selfsign" (include "civo-acme.fullname" .) }}
 {{- end -}}
 
