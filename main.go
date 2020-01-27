@@ -103,7 +103,8 @@ func (c *civoDNSProviderSolver) CleanUp(ch *whapi.ChallengeRequest) error {
 		return errors.New("record value does not match")
 	}
 
-	if resp, err := client.DeleteRecord(r); err != nil {
+	resp, err := client.DeleteRecord(r)
+	if err != nil {
 		fmt.Printf("Deleted record %s error: %s\n", r.Name, err)
 	}
 

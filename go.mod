@@ -11,3 +11,5 @@ require (
 )
 
 replace github.com/prometheus/client_golang => github.com/prometheus/client_golang v0.9.4
+
+replace github.com/civo/civogo => github.com/rberrelleza/civogo v0.0.0-20200126190228-5c6fe06b4d2b

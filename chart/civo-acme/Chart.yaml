@@ -1,6 +1,0 @@
-apiVersion: v2
-name: civo-acme
-description: ACME Webhook solver for CIVO
-type: application
-version: 0.1.0
-appVersion: 0.1.0
