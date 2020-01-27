@@ -20,7 +20,7 @@ kubectl create secret generic dns --from-literal=key=<YOUR_CIVO_TOKEN>
 apiVersion: cert-manager.io/v1alpha2
 kind: Issuer
 metadata:
-  name: civoissuer
+  name: civo
 spec:
   acme:
     email: example@example.com
