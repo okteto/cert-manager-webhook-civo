@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Issuer
+metadata:
+  name: civo
+  namespace: cert-manager
+spec:
+  acme:
+    email: rberrelleza@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - dns01:
+        webhook:
+          solverName: "civo"
+          groupName: civo.webhook.okteto.com
+          config:
+            apiKeySecretRef:
+              key: key
+              name: civo-dns

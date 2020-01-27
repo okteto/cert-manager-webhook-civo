@@ -11,8 +11,7 @@ import (
 	"github.com/jetstack/cert-manager/pkg/acme/webhook/cmd"
 	certmgrv1 "github.com/jetstack/cert-manager/pkg/apis/meta/v1"
 
-	"github.com/okteto/civogo/pkg/client"
-	"github.com/okteto/civogo/pkg/dns"
+	"github.com/civo/civogo"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
@@ -56,13 +55,21 @@ func (c *civoDNSProviderSolver) Present(ch *whapi.ChallengeRequest) error {
 	}
 
 	rn, domain := extractNames(ch.ResolvedFQDN)
-	d, err := dns.GetDomain(client, domain)
+	d, err := client.GetDomain(domain)
 	if err != nil {
 		fmt.Printf("Get domain %s error: %s\n", domain, err)
 		return err
 	}
 
-	_, err = d.NewRecord(client, dns.TXT, rn, ch.Key, 10, 600)
+	r := &civogo.RecordConfig{
+		DomainID: d.ID,
+		Name:     rn,
+		Value:    ch.Key,
+		Type:     civogo.RecordTypeTXT,
+		Priority: 10,
+		TTL:      600}
+
+	_, err = client.NewRecord(r)
 	if err != nil {
 		return err
 	}
@@ -79,13 +86,13 @@ func (c *civoDNSProviderSolver) CleanUp(ch *whapi.ChallengeRequest) error {
 	}
 
 	rn, domain := extractNames(ch.ResolvedFQDN)
-	d, err := dns.GetDomain(client, domain)
+	d, err := client.GetDomain(domain)
 	if err != nil {
 		fmt.Printf("Get domain %s error: %s\n", domain, err)
 		return err
 	}
 
-	r, err := d.GetRecord(client, rn)
+	r, err := client.GetRecord(d.ID, rn)
 	if err != nil {
 		fmt.Printf("Get record %s error: %s\n", rn, err)
 		return err
@@ -96,8 +103,13 @@ func (c *civoDNSProviderSolver) CleanUp(ch *whapi.ChallengeRequest) error {
 		return errors.New("record value does not match")
 	}
 
-	if err := r.Delete(client); err != nil {
+	resp, err := client.DeleteRecord(r)
+	if err != nil {
 		fmt.Printf("Deleted record %s error: %s\n", r.Name, err)
+	}
+
+	if resp.Result != "success" {
+		fmt.Printf("Deleted record %s error: %+v\n", resp)
 	}
 
 	return nil
@@ -107,18 +119,19 @@ func (c *civoDNSProviderSolver) Name() string {
 	return "civo"
 }
 
-func (c *civoDNSProviderSolver) newClientFromConfig(ch *whapi.ChallengeRequest) (*client.Client, error) {
+func (c *civoDNSProviderSolver) newClientFromConfig(ch *whapi.ChallengeRequest) (*civogo.Client, error) {
 	cfg, err := c.loadConfig(ch)
 	if err != nil {
 		return nil, err
 	}
 
-	token, err := c.getSecretData(cfg.APIKeySecretRef, ch.ResourceNamespace)
+	apiKey, err := c.getSecretData(cfg.APIKeySecretRef, ch.ResourceNamespace)
 	if err != nil {
 		return nil, err
 	}
 
-	return client.New(token), nil
+	return civogo.NewClient(apiKey)
+
 }
 
 func (c *civoDNSProviderSolver) loadConfig(ch *whapi.ChallengeRequest) (*civoDNSProviderConfig, error) {
