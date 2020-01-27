@@ -5,7 +5,7 @@ A webhook to use [CIVO DNS](https://civo.com) as a DNS issuer for [cert-manager]
 ## Installation
 
 ```
-$ helm install civo chart/civo-acme --namespace cert-manager
+$ helm install civo ./chart/civo-acme --namespace cert-manager
 ```
 
 # How to Use
