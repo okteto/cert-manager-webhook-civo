@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM golang:1.15 as builder_deps
+FROM okteto/golang:1 as builder_deps
 
 WORKDIR /usr/src/app
 
