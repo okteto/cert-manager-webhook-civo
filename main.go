@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -19,18 +20,20 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	groupName := os.Getenv("GROUP_NAME")
 	if groupName == "" {
 		panic("GROUP_NAME must be specified")
 	}
 
 	cmd.RunWebhookServer(groupName,
-		&civoDNSProviderSolver{},
+		&civoDNSProviderSolver{ctx: ctx},
 	)
 }
 
 type civoDNSProviderSolver struct {
 	client *kubernetes.Clientset
+	ctx    context.Context
 }
 
 type civoDNSProviderConfig struct {
@@ -55,21 +58,20 @@ func (c *civoDNSProviderSolver) Present(ch *whapi.ChallengeRequest) error {
 	}
 
 	rn, domain := extractNames(ch.ResolvedFQDN)
-	d, err := client.GetDomain(domain)
+	d, err := client.GetDNSDomain(domain)
 	if err != nil {
 		fmt.Printf("Get domain %s error: %s\n", domain, err)
 		return err
 	}
 
-	r := &civogo.RecordConfig{
-		DomainID: d.ID,
+	r := &civogo.DNSRecordConfig{
 		Name:     rn,
 		Value:    ch.Key,
-		Type:     civogo.RecordTypeTXT,
+		Type:     civogo.DNSRecordTypeTXT,
 		Priority: 10,
 		TTL:      600}
 
-	_, err = client.NewRecord(r)
+	_, err = client.CreateDNSRecord(d.ID, r)
 	if err != nil {
 		return err
 	}
@@ -86,13 +88,13 @@ func (c *civoDNSProviderSolver) CleanUp(ch *whapi.ChallengeRequest) error {
 	}
 
 	rn, domain := extractNames(ch.ResolvedFQDN)
-	d, err := client.GetDomain(domain)
+	d, err := client.GetDNSDomain(domain)
 	if err != nil {
 		fmt.Printf("Get domain %s error: %s\n", domain, err)
 		return err
 	}
 
-	r, err := client.GetRecord(d.ID, rn)
+	r, err := client.GetDNSRecord(d.ID, rn)
 	if err != nil {
 		fmt.Printf("Get record %s error: %s\n", rn, err)
 		return err
@@ -103,13 +105,13 @@ func (c *civoDNSProviderSolver) CleanUp(ch *whapi.ChallengeRequest) error {
 		return errors.New("record value does not match")
 	}
 
-	resp, err := client.DeleteRecord(r)
+	resp, err := client.DeleteDNSRecord(r)
 	if err != nil {
 		fmt.Printf("Deleted record %s error: %s\n", r.Name, err)
 	}
 
 	if resp.Result != "success" {
-		fmt.Printf("Deleted record %s error: %+v\n", resp)
+		fmt.Printf("Deleted record %s error: %+v\n", r.Name, resp)
 	}
 
 	return nil
@@ -148,7 +150,7 @@ func (c *civoDNSProviderSolver) loadConfig(ch *whapi.ChallengeRequest) (*civoDNS
 }
 
 func (c *civoDNSProviderSolver) getSecretData(selector certmgrv1.SecretKeySelector, ns string) (string, error) {
-	secret, err := c.client.CoreV1().Secrets(ns).Get(selector.Name, metav1.GetOptions{})
+	secret, err := c.client.CoreV1().Secrets(ns).Get(c.ctx, selector.Name, metav1.GetOptions{})
 	if err != nil {
 		return "", fmt.Errorf("failed to load secret %s/%s: %w", ns, selector.Name, err)
 	}

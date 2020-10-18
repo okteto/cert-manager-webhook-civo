@@ -12,18 +12,20 @@ $ helm install webhook-civo https://storage.googleapis.com/charts.okteto.com/cer
 
 ## Secret
 ```
-kubectl create secret generic dns --from-literal=key=<YOUR_CIVO_TOKEN>
+kubectl create secret generic dns --namespace=cert-manager --from-literal=key=<YOUR_CIVO_TOKEN>
 ```
 
 # Issuer
+
+> Update email to match yours 
 ```
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: civo
 spec:
   acme:
-    email: example@example.com
+    email: YOUR_EMAIL
     privateKeySecretRef:
       name: letsencrypt-prod
     server: https://acme-v02.api.letsencrypt.org/directory
@@ -39,8 +41,11 @@ spec:
 ```
 
 ## Certificate
+
+> Update the dnsNames to match yours 
+
 ```
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: my-certificate

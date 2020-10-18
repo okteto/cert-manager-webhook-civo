@@ -1,12 +1,11 @@
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: default-ssl-certificate
-  namespace: default
+  name: my-certificate
 spec:
   dnsNames:
   - '*.example.com'
   issuerRef:
     kind: Issuer
-    name: civoissuer
-  secretName: default-ssl-certificate
+    name: civo
+  secretName: wildcard-example-com-tls
