@@ -3,21 +3,26 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"strings"
 
 	whapi "github.com/jetstack/cert-manager/pkg/acme/webhook/apis/acme/v1alpha1"
 	"github.com/jetstack/cert-manager/pkg/acme/webhook/cmd"
-	certmgrv1 "github.com/jetstack/cert-manager/pkg/apis/meta/v1"
 
 	"github.com/civo/civogo"
 
+	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 )
+
+func init() {
+	log.SetFormatter(&log.JSONFormatter{})
+	log.SetOutput(os.Stdout)
+	log.SetLevel(log.InfoLevel)
+}
 
 func main() {
 	ctx := context.Background()
@@ -37,7 +42,7 @@ type civoDNSProviderSolver struct {
 }
 
 type civoDNSProviderConfig struct {
-	APIKeySecretRef certmgrv1.SecretKeySelector `json:"apiKeySecretRef"`
+	SecretRef string `json:"secretName"`
 }
 
 func (c *civoDNSProviderSolver) Initialize(kubeClientConfig *restclient.Config, stopCh <-chan struct{}) error {
@@ -51,16 +56,17 @@ func (c *civoDNSProviderSolver) Initialize(kubeClientConfig *restclient.Config, 
 }
 
 func (c *civoDNSProviderSolver) Present(ch *whapi.ChallengeRequest) error {
-	fmt.Printf("Presenting challenge for fqdn=%s zone=%s\n", ch.ResolvedFQDN, ch.ResolvedZone)
+	log.Infof("Presenting challenge for fqdn=%s zone=%s", ch.ResolvedFQDN, ch.ResolvedZone)
 	client, err := c.newClientFromConfig(ch)
 	if err != nil {
+		log.Errorf("failed to get client from ChallengeRequest: %s", err)
 		return err
 	}
 
 	rn, domain := extractNames(ch.ResolvedFQDN)
 	d, err := client.GetDNSDomain(domain)
 	if err != nil {
-		fmt.Printf("Get domain %s error: %s\n", domain, err)
+		log.Errorf("failed to get DNS domain '%s' from civo: %s", domain, err)
 		return err
 	}
 
@@ -71,50 +77,42 @@ func (c *civoDNSProviderSolver) Present(ch *whapi.ChallengeRequest) error {
 		Priority: 10,
 		TTL:      600}
 
+	log.Infof("creating DNS record %s/%s", d.ID, r.Name)
 	_, err = client.CreateDNSRecord(d.ID, r)
 	if err != nil {
+		log.Errorf("failed to create DNS Record '%s': %s", r.Name, err)
 		return err
 	}
 
-	fmt.Printf("Presented txt record for fqdn=%s zone=%s\n", ch.ResolvedFQDN, ch.ResolvedZone)
+	log.Infof("Successfully created txt record for fqdn=%s zone=%s", ch.ResolvedFQDN, ch.ResolvedZone)
 	return nil
 }
 
 func (c *civoDNSProviderSolver) CleanUp(ch *whapi.ChallengeRequest) error {
-	fmt.Printf("Cleaning up for fqdn=%s\n", ch.ResolvedFQDN)
+	log.Infof("Cleaning up entry for fqdn=%s", ch.ResolvedFQDN)
 	client, err := c.newClientFromConfig(ch)
 	if err != nil {
-		return err
+		log.Errorf("failed to get client from ChallengeRequest: %s", err)
+		return fmt.Errorf("failed to get client from ChallengeRequest: %w", err)
 	}
 
-	rn, domain := extractNames(ch.ResolvedFQDN)
-	d, err := client.GetDNSDomain(domain)
+	r, err := getDNSRecord(client, ch.ResolvedFQDN, ch.Key)
 	if err != nil {
-		fmt.Printf("Get domain %s error: %s\n", domain, err)
 		return err
-	}
-
-	r, err := client.GetDNSRecord(d.ID, rn)
-	if err != nil {
-		fmt.Printf("Get record %s error: %s\n", rn, err)
-		return err
-	}
-
-	if r.Value != ch.Key {
-		fmt.Printf("Records value does not match: %v\n", ch.ResolvedFQDN)
-		return errors.New("record value does not match")
 	}
 
 	resp, err := client.DeleteDNSRecord(r)
 	if err != nil {
-		fmt.Printf("Deleted record %s error: %s\n", r.Name, err)
+		log.Errorf("failed to delete DNS record '%s': %s", r.Name, err)
+		return fmt.Errorf("failed to delete DNS record '%s': %s", r.Name, err)
 	}
 
-	if resp.Result != "success" {
-		fmt.Printf("Deleted record %s error: %+v\n", r.Name, resp)
+	if resp.Result == "success" {
+		return nil
 	}
 
-	return nil
+	log.Errorf("failed to delete DNS record '%s': %s", r.Name, resp)
+	return fmt.Errorf("failed to delete DNS record '%s': %s", r.Name, resp)
 }
 
 func (c *civoDNSProviderSolver) Name() string {
@@ -127,7 +125,7 @@ func (c *civoDNSProviderSolver) newClientFromConfig(ch *whapi.ChallengeRequest) 
 		return nil, err
 	}
 
-	apiKey, err := c.getSecretData(cfg.APIKeySecretRef, ch.ResourceNamespace)
+	apiKey, err := c.getSecretData(cfg.SecretRef, ch.ResourceNamespace)
 	if err != nil {
 		return nil, err
 	}
@@ -149,17 +147,17 @@ func (c *civoDNSProviderSolver) loadConfig(ch *whapi.ChallengeRequest) (*civoDNS
 	return cfg, nil
 }
 
-func (c *civoDNSProviderSolver) getSecretData(selector certmgrv1.SecretKeySelector, ns string) (string, error) {
-	secret, err := c.client.CoreV1().Secrets(ns).Get(c.ctx, selector.Name, metav1.GetOptions{})
+func (c *civoDNSProviderSolver) getSecretData(secretName string, ns string) (string, error) {
+	secret, err := c.client.CoreV1().Secrets(ns).Get(c.ctx, secretName, metav1.GetOptions{})
 	if err != nil {
-		return "", fmt.Errorf("failed to load secret %s/%s: %w", ns, selector.Name, err)
+		return "", fmt.Errorf("failed to load secret %s/%s: %w", ns, secretName, err)
 	}
 
-	if data, ok := secret.Data[selector.Key]; ok {
+	if data, ok := secret.Data["api-key"]; ok {
 		return string(data), nil
 	}
 
-	return "", fmt.Errorf("no key %s in secret %s/%s", selector.Key, ns, selector.Name)
+	return "", fmt.Errorf("no key %s in secret %s/%s", "api-key", ns, secretName)
 }
 
 func extractNames(fqdn string) (string, string) {
@@ -168,4 +166,33 @@ func extractNames(fqdn string) (string, string) {
 	zone := strings.Join(p[1:], ".")
 	zone = strings.TrimSuffix(zone, ".")
 	return record, zone
+}
+
+func getDNSRecord(client *civogo.Client, fqdn, key string) (*civogo.DNSRecord, error) {
+	rn, domain := extractNames(fqdn)
+	log.Infof("getting domain %s from civo", domain)
+	d, err := client.GetDNSDomain(domain)
+	if err != nil {
+		log.Errorf("failed to get DNS domain '%s' from civo: %s", domain, err)
+		return nil, err
+	}
+
+	log.Infof("getting DNS record %s/%s from civo", d.ID, rn)
+	rs, err := client.ListDNSRecords(d.ID)
+	if err != nil {
+		log.Errorf("failed to get DNS Records for '%s': %s", d.ID, err)
+		return nil, err
+	}
+
+	for _, r := range rs {
+		if r.Name == rn {
+			if r.Value == key {
+				return &r, nil
+			}
+
+			log.Infof("Records value for %s does not match %s", r.Name, key)
+		}
+	}
+
+	return nil, fmt.Errorf("record not found")
 }

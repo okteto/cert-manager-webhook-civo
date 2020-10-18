@@ -1,61 +1,88 @@
-# CIVO DNS webhook for cert-manager
+# ACME webhook for CIVO DNS
 
-A webhook to use [CIVO DNS](https://civo.com) as a DNS issuer for [cert-manager](https://github.com/jetstack/cert-manager).
+This solver can be used when you want to use  [cert-manager](https://github.com/jetstack/cert-manager) with [CIVO DNS](https://civo.com). 
 
 ## Installation
 
-```
-$ helm install webhook-civo https://storage.googleapis.com/charts.okteto.com/cert-manager-webhook-civo-0.1.0.tgz --namespace=cert-manager
+### cert-manager
+
+Follow the [instructions](https://cert-manager.io/docs/installation/) using the cert-manager documentation to install it within your cluster.
+
+
+### Webhook
+
+#### Using public helm chart
+```bash
+helm install --namespace cert-manager cert-manager-webhook-civo https://storage.googleapis.com/charts.okteto.com/cert-manager-webhook-civo-0.2.0.tgz
 ```
 
-# How to Use
+#### From local checkout
 
-## Secret
+```bash
+helm install --namespace cert-manager cert-manager-webhook-civo chart/cert-manager-webhook-civo
 ```
-kubectl create secret generic dns --namespace=cert-manager --from-literal=key=<YOUR_CIVO_TOKEN>
+**Note**: The kubernetes resources used to install the Webhook should be deployed within the same namespace as the cert-manager.
+
+To uninstall the webhook run
+```bash
+helm uninstall --namespace cert-manager cert-manager-webhook-civo
 ```
 
-# Issuer
+## Issuer
 
-> Update email to match yours 
+Create a `ClusterIssuer` or `Issuer` resource as following:
+
 ```
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
-  name: civo
+  name: letsencrypt-staging
 spec:
   acme:
-    email: YOUR_EMAIL
+    # The ACME server URL
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    
+    # Email address used for ACME registration
+    email: mail@example.com # REPLACE THIS WITH YOUR EMAIL
+    
+    # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
-      name: letsencrypt-prod
-    server: https://acme-v02.api.letsencrypt.org/directory
+      name: letsencrypt-staging
+
     solvers:
     - dns01:
         webhook:
           solverName: "civo"
           groupName: civo.webhook.okteto.com
           config:
-            apiKeySecretRef:
-              key: key
-              name: dns
+            secretName: civo-secret
 ```
 
-## Certificate
+### Credentials
+In order to access the CIVO API, the webhook needs an [API token](https://www.civo.com/account/security).
 
-> Update the dnsNames to match yours 
+```
+kubectl create secret generic civo-secret --from-literal=api-key=<YOUR_CIVO_TOKEN>
+```
+
+### Create a certificate
+
+Create your certificate resource as follows:
 
 ```
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: my-certificate
+  name: example-cert
+  namespace: cert-manager
 spec:
+  commonName: example.com
   dnsNames:
-  - '*.example.com'
+  - example.com # REPLACE THIS WITH YOUR DOMAIN
   issuerRef:
-    kind: Issuer
-    name: civo
-  secretName: wildcard-example-com-tls
+   name: letsencrypt-staging
+   kind: ClusterIssuer
+  secretName: example-cert
 ```
 
 # Contributing

@@ -1,19 +1,23 @@
 apiVersion: cert-manager.io/v1
-kind: Issuer
+kind: ClusterIssuer
 metadata:
-  name: civo
+  name: letsencrypt-staging
 spec:
   acme:
-    email: example@example.com
+    # The ACME server URL
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    
+    # Email address used for ACME registration
+    email: mail@example.com # REPLACE THIS WITH YOUR EMAIL
+    
+    # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
-      name: letsencrypt-prod
-    server: https://acme-v02.api.letsencrypt.org/directory
+      name: letsencrypt-staging
+
     solvers:
     - dns01:
         webhook:
           solverName: "civo"
           groupName: civo.webhook.okteto.com
           config:
-            apiKeySecretRef:
-              key: key
-              name: dns
+            secretName: civo-secret

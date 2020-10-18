@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "civo-acme.fullname" . }}
   labels:
-    app.kubernetes.io/component: webhook
+    app.kubernetes.io/component: webhook-civo
     {{- include "civo-acme.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
