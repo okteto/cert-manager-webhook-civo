@@ -3,6 +3,7 @@ module github.com/okteto/cert-manager-webhook-civo
 go 1.15
 
 require (
+	github.com/cespare/reflex v0.3.0 // indirect
 	github.com/civo/civogo v0.2.19
 	github.com/jetstack/cert-manager v1.0.3
 	github.com/sirupsen/logrus v1.6.0

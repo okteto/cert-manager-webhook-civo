@@ -4,9 +4,9 @@ metadata:
   name: example-cert
   namespace: cert-manager
 spec:
-  commonName: example.com
+  commonName: "hi.civo.okteto.net"
   dnsNames:
-  - example.com # REPLACE THIS WITH YOUR DOMAIN
+  - "hi.civo.okteto.net" # REPLACE THIS WITH YOUR DOMAIN
   issuerRef:
    name: letsencrypt-staging
    kind: ClusterIssuer

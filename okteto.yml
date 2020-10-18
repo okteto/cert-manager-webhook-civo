@@ -1,14 +1,14 @@
 name: webhook-civo
 labels:
   app.kubernetes.io/component: webhook-civo
-image: okteto/golang:1
+image: okteto/civo-webhook:dev
+namespace: cert-manager
 command: bash
 securityContext:
   capabilities:
     add:
     - SYS_PTRACE
 volumes:
-- /go/pkg/
 - /root/.cache/go-build/
 sync:
 - .:/usr/src/app
