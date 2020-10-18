@@ -1,15 +1,14 @@
-.PHONY: build
-build: 
-	go build -o webhook
+watch:
+	ulimit -n 1000
+	reflex -s -r '\.go$$' make start
 
 .PHONY: start
 start: build
 	./webhook --tls-cert-file=/tls/tls.crt --tls-private-key-file=/tls/tls.key
 
-
-watch:
-	ulimit -n 1000
-	reflex -s -r '\.go$$' make start
+.PHONY: build
+build: 
+	go build -o webhook
 
 .PHONY: test
 test: 
