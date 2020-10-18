@@ -135,7 +135,7 @@ spec:
 ## Launch your Development Environment
 
 1. Deploy the latest version of `cert-manager` and `cert-manager-webhook-civo` as per the instructions above.
-1. Run `okteto up` from the root of this repo. This will deploy your pre-configured remote development environment, and keep your file system synchronized.
+1. Run `okteto up` from the root of this repo. This will deploy your pre-configured remote development environment, and keep your file system synchronized automatically.
 1. Run `make` on the remote terminal to start the webhook. This will build the webhook, start it with the required configuration, and hot reload it whenever a file is changed.
 1. Code away!
 

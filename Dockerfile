@@ -1,13 +1,17 @@
 # syntax = docker/dockerfile:experimental
-FROM okteto/golang:1 as builder_deps
+FROM okteto/golang:1 as builder
 
 WORKDIR /usr/src/app
+
+# used by the dev env
+RUN go get -u github.com/cespare/reflex
 
 COPY go.mod .
 COPY go.sum .
 RUN --mount=type=cache,target=/root/go/pkg go mod download
 
-FROM builder_deps as builder
+RUN go get -u github.com/cespare/reflex
+
 COPY . .
 RUN --mount=type=cache,target=/root/.cache/go-build CGO_ENABLED=0 GOOS=linux go build -v -o webhook .
 
