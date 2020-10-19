@@ -13,3 +13,7 @@ build:
 .PHONY: test
 test: 
 	TEST_ZONE_NAME=example.com. go test ./...
+
+.PHONY: readme
+readme:
+	helm-docs

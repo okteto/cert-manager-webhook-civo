@@ -1,10 +1,8 @@
-# Cert-Manager ACME DNS01 Webhook Solver for CIVO DNS
+# cert-manager-webhook-civo
 
-[![Go Report Card](https://goreportcard.com/badge/github.com/okteto/cert-manager-webhook-civo)](https://goreportcard.com/report/github.com/okteto/cert-manager-webhook-civo)
-[![Releases](https://img.shields.io/github/v/release/okteto/cert-manager-webhook-civo?include_prereleases)](https://github.com/okteto/cert-manager-webhook-civo/releases)
-[![LICENSE](https://img.shields.io/github/license/okteto/cert-manager-webhook-civo)](https://github.com/slicen/cert-manager-webhook-civo/blob/master/LICENSE)
+![Version: 0.2.0](https://img.shields.io/badge/Version-0.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.2.0](https://img.shields.io/badge/AppVersion-0.2.0-informational?style=flat-square)
 
-This solver can be used when you want to use  [cert-manager](https://github.com/jetstack/cert-manager) with [CIVO DNS](https://civo.com). 
+A webhook to use CIVO DNS as a DNS issuer for cert-manager
 
 ## Installation
 
@@ -54,10 +52,10 @@ spec:
   acme:
     # The ACME server URL
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    
+   
     # Email address used for ACME registration
     email: mail@example.com # REPLACE THIS WITH YOUR EMAIL
-    
+   
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
       name: letsencrypt-staging
@@ -87,10 +85,10 @@ spec:
   acme:
     # The ACME server URL
     server: https://acme-staging-v02.api.letsencrypt.org/directory
-    
+   
     # Email address used for ACME registration
     email: mail@example.com # REPLACE THIS WITH YOUR EMAIL
-    
+   
     # Name of a secret used to store the ACME account private key
     privateKeySecretRef:
       name: letsencrypt-staging
@@ -126,25 +124,29 @@ spec:
   secretName: example-cert
 ```
 
-# Development
+## Values
 
-## Prerequisites
--  Admin access to a cluster. We recommend you [launch one on CIVO](https://www.civo.com/?ref=af9018).
--  [okteto CLI](https://okteto.com/docs/getting-started/installation)
-- `kubectl` installed and configured to talk to your cluster
-
-## Launch your Development Environment
-
-1. Deploy the latest version of `cert-manager` and `cert-manager-webhook-civo` as per the instructions above.
-1. Run `okteto up` from the root of this repo. This will deploy your pre-configured remote development environment, and keep your file system synchronized automatically.
-1. Run `make` on the remote terminal to start the webhook. This will build the webhook, start it with the required configuration, and hot reload it whenever a file is changed.
-1. Code away!
+| Key | Type | Default | Description |
+|-----|------|---------|-------------|
+| affinity | object | `{}` | Node affinity for pod assignment |
+| certManager.namespace | string | `"cert-manager"` | cert-manager's namespace |
+| certManager.serviceAccountName | string | `"cert-manager"` | cert-manager's serviceAccountName |
+| fullnameOverride | string | `""` | Override the full name of the created resources |
+| groupName | string | `"civo.webhook.okteto.com"` | groupName for the webhook, issuers and clusterIssuers must match this |
+| image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
+| image.repository | string | `"okteto/civo-webhook"` | Image repository |
+| nameOverride | string | `""` | Override the name of the created resources |
+| nodeSelector | object | `{}` | Node labels for pod assignment |
+| podSecurityContext | object | `{}` | Optional pod context. The yaml block should adhere to the [PodSecurityContext spec](https://v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#securitycontext-v1-core) |
+| replicaCount | int | `1` | Number of webhook replicas |
+| resources | object | `{}` | CPU/memory resource requests/limits |
+| securityContext | object | `{}` | Optional security context. The yaml block should adhere to the [SecurityContext spec](https://v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podsecuritycontext-v1-core) |
+| service.port | int | `443` | port for the webhook API server |
+| service.type | string | `"ClusterIP"` | service type for the webhook API server |
+| serviceAccount.create | bool | `true` | If true, create a new service account |
+| serviceAccount.name | string | `nil` | Service account to be used. If not set and serviceAccount.create is true, a name is generated using the fullname template |
+| tolerations | list | `[]` | Node tolerations for pod assignment |
 
 # Contributing
-If you want to get involved, we'd love to receive a pull request, issues, or an offer to help over at the [#KUBE100](https://app.slack.com/client/TKW8H5MBK/CMVCKMCN5) channel in the Civo-Community slack or at the [#Okteto](https://kubernetes.slack.com/messages/CM1QMQGS0/) channel in the Kubernetes slack.
 
-Maintainers:
-- [Ramiro Berrelleza](https://twitter.com/rberrelleza)
-- [Pablo Chico de Guzman](https://twitter.com/pchico83)
-
-Please see the [contribution guidelines](CONTRIBUTING.md)
+This chart is maintained at https://github.com/okteto/cert-manager-webhook-civo.

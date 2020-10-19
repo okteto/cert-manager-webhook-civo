@@ -2,11 +2,10 @@ apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: example-cert
-  namespace: cert-manager
 spec:
-  commonName: "hi.civo.okteto.net"
+  commonName: "example.com"
   dnsNames:
-  - "hi.civo.okteto.net" # REPLACE THIS WITH YOUR DOMAIN
+  - "example.com" # REPLACE THIS WITH YOUR DOMAIN
   issuerRef:
    name: letsencrypt-staging
    kind: ClusterIssuer
