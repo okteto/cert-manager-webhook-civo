@@ -1,9 +1,19 @@
-.DEFAULT_GOAL := build
-.PHONY: build
-build: go build -o webhook .
+watch:
+	ulimit -n 1000
+	reflex -s -r '\.go$$' make start
 
 .PHONY: start
-build: webhook --tls-cert-file=/tls/tls.crt --tls-private-key-file=/tls/tls.key
+start: build
+	./webhook --tls-cert-file=/tls/tls.crt --tls-private-key-file=/tls/tls.key
+
+.PHONY: build
+build: 
+	go build -o webhook
 
 .PHONY: test
-test: go test ./...
+test: 
+	TEST_ZONE_NAME=example.com. go test ./...
+
+.PHONY: readme
+readme:
+	helm-docs

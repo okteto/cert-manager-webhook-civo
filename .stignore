@@ -1,3 +1,4 @@
 /.git
 /apiserver.local.config
 /webhook
+/kubebuilder

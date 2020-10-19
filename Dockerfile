@@ -1,23 +1,24 @@
 # syntax = docker/dockerfile:experimental
-FROM golang:1.13 as builder_deps
+FROM okteto/golang:1 as builder
 
-WORKDIR /app
+WORKDIR /usr/src/app
+
+# used by the dev env
+RUN go get -u github.com/cespare/reflex
 
 COPY go.mod .
 COPY go.sum .
-RUN go mod download
+RUN --mount=type=cache,target=/root/go/pkg go mod download
 
-FROM builder_deps as builder
+RUN go get -u github.com/cespare/reflex
+
 COPY . .
 RUN --mount=type=cache,target=/root/.cache/go-build CGO_ENABLED=0 GOOS=linux go build -v -o webhook .
 
-FROM alpine
-RUN apk update \
-        && apk upgrade \
-        && apk add --no-cache \
-        ca-certificates \
-        && update-ca-certificates 2>/dev/null || true
+FROM debian:buster
+RUN apt-get update \
+        && apt-get install -y ca-certificates
 
-COPY --from=builder /app/webhook /app/webhook
+COPY --from=builder /usr/sr/app/webhook /app/webhook
 EXPOSE 443
 ENTRYPOINT ["/app/webhook"]
