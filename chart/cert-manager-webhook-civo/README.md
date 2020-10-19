@@ -13,7 +13,9 @@ Follow the [instructions](https://cert-manager.io/docs/installation/) using the 
 ### Webhook
 
 ```bash
-helm install --namespace cert-manager cert-manager-webhook-civo https://storage.googleapis.com/charts.okteto.com/cert-manager-webhook-civo-0.2.0.tgz
+helm repo add okteto https://charts.okteto.com
+helm repo update
+helm install --namespace cert-manager cert-manager-webhook-civo okteto/cert-manager-webhook-civo
 ```
 
 ## Uninstalling
