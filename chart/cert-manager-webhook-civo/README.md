@@ -12,19 +12,14 @@ Follow the [instructions](https://cert-manager.io/docs/installation/) using the 
 
 ### Webhook
 
-#### Using public helm chart
 ```bash
 helm install --namespace cert-manager cert-manager-webhook-civo https://storage.googleapis.com/charts.okteto.com/cert-manager-webhook-civo-0.2.0.tgz
 ```
 
-#### From local checkout
-
-```bash
-helm install --namespace cert-manager cert-manager-webhook-civo chart/cert-manager-webhook-civo
-```
-**Note**: The kubernetes resources used to install the Webhook should be deployed within the same namespace as the cert-manager.
+## Uninstalling
 
 To uninstall the webhook run
+
 ```bash
 helm uninstall --namespace cert-manager cert-manager-webhook-civo
 ```
