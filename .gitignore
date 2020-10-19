@@ -5,4 +5,4 @@ chart/cert-manager-webhook-civo-0.1.0.tgz
 kubebuilder*
 kubebuilder-tools.tar.gz
 kubebuilder.tar.gz
-
+output

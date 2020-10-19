@@ -19,6 +19,6 @@ FROM debian:buster
 RUN apt-get update \
         && apt-get install -y ca-certificates
 
-COPY --from=builder /usr/sr/app/webhook /app/webhook
+COPY --from=builder /usr/src/app/webhook /app/webhook
 EXPOSE 443
 ENTRYPOINT ["/app/webhook"]
