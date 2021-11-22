@@ -63,10 +63,10 @@ func (c *civoDNSProviderSolver) Present(ch *whapi.ChallengeRequest) error {
 		return err
 	}
 
-	rn, domain := extractNames(ch.ResolvedFQDN)
-	d, err := client.GetDNSDomain(domain)
+	rn := strings.TrimSuffix(ch.ResolvedFQDN, "."+ch.ResolvedZone)
+	d, err := client.GetDNSDomain(strings.TrimSuffix(ch.ResolvedZone, "."))
 	if err != nil {
-		log.Errorf("failed to get DNS domain '%s' from civo: %s", domain, err)
+		log.Errorf("failed to get DNS domain '%s' from civo: %s", ch.ResolvedZone, err)
 		return err
 	}
 
@@ -95,8 +95,8 @@ func (c *civoDNSProviderSolver) CleanUp(ch *whapi.ChallengeRequest) error {
 		log.Errorf("failed to get client from ChallengeRequest: %s", err)
 		return fmt.Errorf("failed to get client from ChallengeRequest: %w", err)
 	}
-
-	r, err := getDNSRecord(client, ch.ResolvedFQDN, ch.Key)
+	rn := strings.TrimSuffix(ch.ResolvedFQDN, "."+ch.ResolvedZone)
+	r, err := getDNSRecord(client, rn, strings.TrimSuffix(ch.ResolvedZone, "."), ch.Key)
 	if err != nil {
 		return err
 	}
@@ -160,20 +160,11 @@ func (c *civoDNSProviderSolver) getSecretData(secretName string, ns string) (str
 	return "", fmt.Errorf("no key %s in secret %s/%s", "api-key", ns, secretName)
 }
 
-func extractNames(fqdn string) (string, string) {
-	p := strings.Split(fqdn, ".")
-	record := p[0]
-	zone := strings.Join(p[1:], ".")
-	zone = strings.TrimSuffix(zone, ".")
-	return record, zone
-}
-
-func getDNSRecord(client *civogo.Client, fqdn, key string) (*civogo.DNSRecord, error) {
-	rn, domain := extractNames(fqdn)
+func getDNSRecord(client *civogo.Client, rn, domain, key string) (*civogo.DNSRecord, error) {
 	log.Infof("getting domain %s from civo", domain)
 	d, err := client.GetDNSDomain(domain)
 	if err != nil {
-		log.Errorf("failed to get DNS domain '%s' from civo: %s", domain, err)
+		log.Errorf("failed to get DNS host '%s' in domain '%s' from civo: %s", rn, domain, err)
 		return nil, err
 	}
 
