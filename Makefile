@@ -20,7 +20,6 @@ readme:
 
 .PHONY: chart
 chart:
-	okteto build -t okteto/civo-webhook:${TAG}
 	helm package chart/cert-manager-webhook-civo --app-version ${TAG}
 	mkdir -p output
 	mv *.tgz output/

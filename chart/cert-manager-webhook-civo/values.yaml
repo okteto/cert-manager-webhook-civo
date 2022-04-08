@@ -1,9 +1,13 @@
 # -- groupName for the webhook, issuers and clusterIssuers must match this
 groupName: civo.webhook.okteto.com
 
+# -- region on CIVO
+region: NYC1
+
 image:
   # -- Image repository
   repository: okteto/civo-webhook
+  tag: 0.3.0
   
   # -- Image pull policy
   pullPolicy: IfNotPresent
