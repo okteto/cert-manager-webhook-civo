@@ -7,8 +7,8 @@ import (
 	"os"
 	"strings"
 
-	whapi "github.com/jetstack/cert-manager/pkg/acme/webhook/apis/acme/v1alpha1"
-	"github.com/jetstack/cert-manager/pkg/acme/webhook/cmd"
+	whapi "github.com/cert-manager/cert-manager/pkg/acme/webhook/apis/acme/v1alpha1"
+	"github.com/cert-manager/cert-manager/pkg/acme/webhook/cmd"
 
 	"github.com/civo/civogo"
 
@@ -26,6 +26,12 @@ func init() {
 
 func main() {
 	ctx := context.Background()
+
+	region := os.Getenv("REGION")
+	if region == "" {
+		region = "NYC1"
+	}
+
 	groupName := os.Getenv("GROUP_NAME")
 	if groupName == "" {
 		panic("GROUP_NAME must be specified")
@@ -39,6 +45,7 @@ func main() {
 type civoDNSProviderSolver struct {
 	client *kubernetes.Clientset
 	ctx    context.Context
+	region string
 }
 
 type civoDNSProviderConfig struct {
@@ -130,7 +137,7 @@ func (c *civoDNSProviderSolver) newClientFromConfig(ch *whapi.ChallengeRequest) 
 		return nil, err
 	}
 
-	return civogo.NewClient(apiKey)
+	return civogo.NewClient(apiKey, c.region)
 
 }
 
