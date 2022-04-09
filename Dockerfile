@@ -10,8 +10,6 @@ COPY go.mod .
 COPY go.sum .
 RUN --mount=type=cache,target=/root/go/pkg go mod download
 
-RUN go get -u github.com/cespare/reflex
-
 COPY . .
 RUN --mount=type=cache,target=/root/.cache/go-build CGO_ENABLED=0 GOOS=linux go build -v -o webhook .
 
