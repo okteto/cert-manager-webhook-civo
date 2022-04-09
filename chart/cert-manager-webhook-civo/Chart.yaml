@@ -1,4 +1,4 @@
-apiVersion: v2  
+apiVersion: v2
 name: cert-manager-webhook-civo
 description: A webhook to use CIVO DNS as a DNS issuer for cert-manager
 home: https://github.com/okteto/cert-manager-webhook-civo
@@ -13,5 +13,6 @@ keywords:
 sources:
 - https://github.com/okteto/cert-manager-webhook-civo
 maintainers:
-  - email: rberrelleza@gmail.com
-    name: Ramiro Berrelleza
+- email: rberrelleza@gmail.com
+  name: Ramiro Berrelleza
+  url: https://github.com/rberrelleza

@@ -8,7 +8,7 @@ image:
   # -- Image repository
   repository: okteto/civo-webhook
   tag: 0.3.0
-  
+
   # -- Image pull policy
   pullPolicy: IfNotPresent
 
@@ -24,14 +24,14 @@ fullnameOverride: ""
 serviceAccount:
   # -- If true, create a new service account
   create: true
-  
+
   # -- Service account to be used. If not set and serviceAccount.create is true, a name is generated using the fullname template
   name:
 
 certManager:
   # -- cert-manager's namespace
   namespace: cert-manager
-  
+
   # -- cert-manager's serviceAccountName
   serviceAccountName: cert-manager
 
