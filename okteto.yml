@@ -1,5 +1,5 @@
 name: webhook-civo
-labels:
+selector:
   app.kubernetes.io/component: webhook-civo
 image: okteto/civo-webhook:dev
 namespace: cert-manager

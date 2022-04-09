@@ -12,11 +12,11 @@ Since this webhook depends on cert-manager, certificates and other Kubernetes re
 
 Clone the repo:
 ```sh
-git clone https://github.com/okteto/civo-acme
+git clone https://github.com/okteto/cert-manager-webhook-civo
 ```
 
 Deploy the latest version of webhook via Helm 3 in your cluster:
-`helm install dev charts/civo-acme`
+`helm install dev charts/cert-manager-webhook-civo`
 
 Deploy your development environment with [`okteto`](https://github.com/okteto/okteto):
     `okteto up`
