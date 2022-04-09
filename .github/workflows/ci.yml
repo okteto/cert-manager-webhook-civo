@@ -1,4 +1,4 @@
-name: Create and publish the base image
+name: CI
 
 on: [push]
 
