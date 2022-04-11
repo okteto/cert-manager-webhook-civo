@@ -1,5 +1,10 @@
 # syntax = docker/dockerfile:experimental
-FROM okteto/golang:1.17 as builder
+FROM golang:1.17-buster as builder
+
+RUN apt update && \
+    apt -y install \
+        apt-transport-https \
+        ca-certificates
 
 WORKDIR /usr/src/app
 
@@ -13,10 +18,8 @@ RUN --mount=type=cache,target=/root/go/pkg go mod download
 COPY . .
 RUN --mount=type=cache,target=/root/.cache/go-build CGO_ENABLED=0 GOOS=linux go build -v -o webhook .
 
-FROM debian:buster
-RUN apt-get update \
-        && apt-get install -y ca-certificates
-
+FROM scratch
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=builder /usr/src/app/webhook /app/webhook
 EXPOSE 443
 ENTRYPOINT ["/app/webhook"]
