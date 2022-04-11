@@ -23,6 +23,16 @@ jobs:
           push: false
           tags: okteto/civo-webhook:ct
 
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'okteto/civo-webhook:ct'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
+
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
