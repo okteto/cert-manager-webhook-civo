@@ -9,7 +9,7 @@ RUN apt update && \
 WORKDIR /usr/src/app
 
 # used by the dev env
-RUN go get -u github.com/cespare/reflex
+RUN go install github.com/cespare/reflex@latest
 
 COPY go.mod .
 COPY go.sum .
