@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM golang:1.17-buster as builder
+FROM golang:1.18-buster as builder
 
 RUN apt update && \
     apt -y install \
