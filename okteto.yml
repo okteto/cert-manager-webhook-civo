@@ -1,17 +1,26 @@
-name: webhook-civo
-selector:
-  app.kubernetes.io/component: webhook-civo
-image: okteto/civo-webhook:dev
-namespace: cert-manager
-command: bash
-securityContext:
-  capabilities:
-    add:
-    - SYS_PTRACE
-volumes:
-- /root/.cache/go-build/
-sync:
-- .:/usr/src/app
-forward:
-- 2345:2345
-- 8443:443
+#build:
+#  webhook:
+#    context: .
+#    image: okteto/civo-webhook:dev
+#  dev:
+#    context: .
+#    image: okteto/civo-webhook-dev
+#    target: dev
+deploy:
+- helm upgrade --install cert-manager-webhook-civo chart/cert-manager-webhook-civo
+dev:
+  webhook:
+    command: bash
+    image: okteto/golang:1.18
+    selector:
+      app.kubernetes.io/component: webhook-civo
+    securityContext:
+      capabilities:
+        add:
+        - SYS_PTRACE
+    volumes:
+    - /root/.cache/go-build/
+    sync:
+    - .:/usr/src/app
+    forward:
+    - 2345:2345

@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: okteto
+spec:
+  commonName: "*.civo.okteto.net"
+  dnsNames:
+  - "*.civo.okteto.net"
+  issuerRef:
+   name: letsencrypt
+   kind: Issuer
+  secretName: okteto-ssl-certificate

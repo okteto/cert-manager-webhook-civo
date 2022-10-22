@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    # The ACME server URL
+    server: https://acme-v02.api.letsencrypt.org/directory
+   
+    # Email address used for ACME registration
+    email: ramiro@okteto.com
+   
+    # Name of a secret used to store the ACME account private key
+    privateKeySecretRef:
+      name: letsencrypt
+
+    solvers:
+    - dns01:
+        webhook:
+          solverName: "civo"
+          groupName: civo.webhook.okteto.com
+          config:
+            secretName: civo-secret
