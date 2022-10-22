@@ -1,11 +1,3 @@
-build:
-  webhook:
-    context: .
-    image: okteto/civo-webhook:dev
-  dev:
-    context: .
-    image: okteto/civo-webhook-dev
-    target: dev
 deploy:
 - helm upgrade --install cert-manager-webhook-civo chart/cert-manager-webhook-civo
 dev:
