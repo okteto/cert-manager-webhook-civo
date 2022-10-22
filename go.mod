@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/cert-manager/cert-manager v1.9.1
-	github.com/civo/civogo v0.3.0
+	github.com/civo/civogo v0.3.4
 	github.com/sirupsen/logrus v1.8.1
 	k8s.io/apimachinery v0.24.2
 	k8s.io/client-go v0.24.2
