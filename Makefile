@@ -7,9 +7,12 @@ watch:
 start: build
 	./webhook --tls-cert-file=/tls/tls.crt --tls-private-key-file=/tls/tls.key
 
-build: 
+build:
 	go build -o webhook
 
+dep: 
+	go mod tidy -compat=1.18
+	
 test: 
 	TEST_ZONE_NAME=example.com. go test ./...
 
