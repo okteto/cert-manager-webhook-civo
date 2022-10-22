@@ -1,6 +1,6 @@
 # cert-manager-webhook-civo
 
-![Version: 0.3.1](https://img.shields.io/badge/Version-0.3.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.3.1](https://img.shields.io/badge/AppVersion-0.3.1-informational?style=flat-square)
+![Version: 0.3.2](https://img.shields.io/badge/Version-0.3.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.3.2](https://img.shields.io/badge/AppVersion-0.3.2-informational?style=flat-square)
 
 A webhook to use CIVO DNS as a DNS issuer for cert-manager
 
@@ -132,7 +132,7 @@ spec:
 | groupName | string | `"civo.webhook.okteto.com"` | groupName for the webhook, issuers and clusterIssuers must match this |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
 | image.repository | string | `"okteto/civo-webhook"` | Image repository |
-| image.tag | string | `"0.3.1"` |  |
+| image.tag | string | `"0.3.2"` |  |
 | nameOverride | string | `""` | Override the name of the created resources |
 | nodeSelector | object | `{}` | Node labels for pod assignment |
 | podSecurityContext | object | `{}` | Optional pod context. The yaml block should adhere to the [PodSecurityContext spec](https://v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#securitycontext-v1-core) |
