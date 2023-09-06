@@ -1,6 +1,6 @@
 /chart
 /civo-acme
-chart/cert-manager-webhook-civo-0.1.0.tgz
+chart/cert-manager-webhook-civo-*.tgz
 /.git
 Dockerfile
 /webhook

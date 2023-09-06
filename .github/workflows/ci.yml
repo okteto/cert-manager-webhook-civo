@@ -54,7 +54,7 @@ jobs:
         run: ct lint --config ct.yaml
 
 
-      - name:  Publish chart dry run
+      - name:  Publish dev chart
         uses: rberrelleza/helm-oci-chart-releaser@09f8ddb3aed48c69251fe53aeddc5c3b21796682
         with:
           name: cert-manager-webhook-civo
