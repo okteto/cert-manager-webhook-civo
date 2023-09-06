@@ -59,7 +59,7 @@ jobs:
         with:
           name: cert-manager-webhook-civo
           repository: okteto/cert-manager-webhook-civo
-          tag: 0.0.0-dev
+          tag: 0.0.0-${{ github.sha }}
           path: chart/cert-manager-webhook-civo 
           registry: ghcr.io
           registry_username: ${{ github.actor }}
