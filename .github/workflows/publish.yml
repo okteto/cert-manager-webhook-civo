@@ -36,7 +36,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name:  Publish chart
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: rberrelleza/helm-oci-chart-releaser@09f8ddb3aed48c69251fe53aeddc5c3b21796682
         with:
           name: cert-manager-webhook-civo
           repository: okteto/cert-manager-webhook-civo
