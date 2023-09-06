@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
 
     steps:
       - name: Checkout repository
@@ -35,14 +36,14 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name:  Publish chart
-        uses: appany/helm-oci-chart-releaser@v0.3.0
+        uses: appany/helm-oci-chart-releaser@v0.4.1
         with:
           name: cert-manager-webhook-civo
           repository: okteto/cert-manager-webhook-civo
           tag: ${{  github.ref_name }}
           path: chart/cert-manager-webhook-civo 
           registry: ghcr.io
-          registry_username: ${{ secrets.REGISTRY_USERNAME }}
-          registry_password: ${{ secrets.REGISTRY_PASSWORD }}
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
           update_dependencies: 'true'
         
