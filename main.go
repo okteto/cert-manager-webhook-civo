@@ -49,7 +49,8 @@ type civoDNSProviderSolver struct {
 }
 
 type civoDNSProviderConfig struct {
-	SecretRef string `json:"secretName"`
+	SecretNameRef string `json:"secretName"`
+	SecretKeyRef  string `json:"secretKey"`
 }
 
 func (c *civoDNSProviderSolver) Initialize(kubeClientConfig *restclient.Config, stopCh <-chan struct{}) error {
@@ -132,7 +133,7 @@ func (c *civoDNSProviderSolver) newClientFromConfig(ch *whapi.ChallengeRequest) 
 		return nil, err
 	}
 
-	apiKey, err := c.getSecretData(cfg.SecretRef, ch.ResourceNamespace)
+	apiKey, err := c.getSecretData(cfg.SecretNameRef, ch.ResourceNamespace, cfg.SecretKeyRef)
 	if err != nil {
 		return nil, err
 	}
@@ -154,17 +155,17 @@ func (c *civoDNSProviderSolver) loadConfig(ch *whapi.ChallengeRequest) (*civoDNS
 	return cfg, nil
 }
 
-func (c *civoDNSProviderSolver) getSecretData(secretName string, ns string) (string, error) {
+func (c *civoDNSProviderSolver) getSecretData(secretName string, ns string, secretKey string) (string, error) {
 	secret, err := c.client.CoreV1().Secrets(ns).Get(c.ctx, secretName, metav1.GetOptions{})
 	if err != nil {
 		return "", fmt.Errorf("failed to load secret %s/%s: %w", ns, secretName, err)
 	}
 
-	if data, ok := secret.Data["api-key"]; ok {
+	if data, ok := secret.Data[secretKey]; ok {
 		return string(data), nil
 	}
 
-	return "", fmt.Errorf("no key %s in secret %s/%s", "api-key", ns, secretName)
+	return "", fmt.Errorf("no key %s in secret %s/%s", secretKey, ns, secretName)
 }
 
 func getDNSRecord(client *civogo.Client, rn, domain, key string) (*civogo.DNSRecord, error) {
