@@ -11,7 +11,7 @@ build:
 	go build -o webhook
 
 dep: 
-	go mod tidy -compat=1.18
+	go mod tidy -compat=1.21
 	
 test: 
 	TEST_ZONE_NAME=example.com. go test ./...

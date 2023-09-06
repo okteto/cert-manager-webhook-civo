@@ -1,6 +1,6 @@
 module github.com/okteto/cert-manager-webhook-civo
 
-go 1.18
+go 1.21
 
 require (
 	github.com/cert-manager/cert-manager v1.10.0

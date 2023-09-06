@@ -3,7 +3,7 @@ deploy:
 dev:
   webhook:
     command: bash
-    image: okteto/golang:1.18
+    image: okteto/golang:1
     selector:
       app.kubernetes.io/component: webhook-civo
     securityContext:
