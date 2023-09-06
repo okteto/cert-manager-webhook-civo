@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: write
 
     steps:
       - name: Checkout
@@ -52,6 +53,20 @@ jobs:
       - name: Run chart-testing (lint)
         run: ct lint --config ct.yaml
 
+
+      - name:  Publish dev chart
+        uses: rberrelleza/helm-oci-chart-releaser@09f8ddb3aed48c69251fe53aeddc5c3b21796682
+        with:
+          name: cert-manager-webhook-civo
+          repository: okteto/cert-manager-webhook-civo
+          tag: 0.0.0-${{ github.sha }}
+          path: chart/cert-manager-webhook-civo 
+          registry: ghcr.io
+          registry_username: ${{ github.actor }}
+          registry_password: ${{ secrets.GITHUB_TOKEN }}
+          update_dependencies: 'true'
+          dry_run: 'true'
+          
       #- name: Create kind cluster
       #  uses: helm/kind-action@v1.2.0
 
