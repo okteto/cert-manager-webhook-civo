@@ -50,7 +50,7 @@ jobs:
         run: ct lint --config ct.yaml
 
       - name:  Publish dev chart
-        uses: appany/helm-oci-chart-releaser@v0.4.1
+        uses: appany/helm-oci-chart-releaser@main
         with:
           name: cert-manager-webhook-civo
           repository: okteto/cert-manager-webhook-civo
