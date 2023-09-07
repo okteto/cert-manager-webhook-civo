@@ -147,7 +147,7 @@ spec:
 1. Code away!
 
 # Contributing
-If you want to get involved, we'd love to receive a pull request, issues, or an offer to help over at the [#Kubernetes](https://app.slack.com/client/TKW8H5MBK/CMVCKMCN5) channel in the Civo-Community slack or at the [#Okteto](https://kubernetes.slack.com/messages/CM1QMQGS0/) channel in the Kubernetes slack.
+If you want to get involved, we'd love to receive a pull request, issues, or an offer to help. [Open an issue](https://github.com/okteto/cert-manager-webhook-civo/issues) to get started!
 
 Maintainers:
 - [Ramiro Berrelleza](https://twitter.com/rberrelleza)
