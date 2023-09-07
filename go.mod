@@ -5,7 +5,7 @@ go 1.21
 require (
 	github.com/cert-manager/cert-manager v1.10.0
 	github.com/civo/civogo v0.3.4
-	github.com/sirupsen/logrus v1.8.1
+	github.com/sirupsen/logrus v1.9.3
 	k8s.io/apimachinery v0.25.2
 	k8s.io/client-go v0.25.2
 )
