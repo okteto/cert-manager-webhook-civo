@@ -6,5 +6,5 @@ kubebuilder*
 kubebuilder-tools.tar.gz
 kubebuilder.tar.gz
 output
-cert-manager-webhook-civo
+/cert-manager-webhook-civo
 old-index.yaml
