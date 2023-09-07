@@ -1,7 +1,0 @@
-# See https://github.com/helm/chart-testing#configuration
-remote: origin
-target-branch: main
-chart-dirs:
-  - chart
-helm-extra-set-args: --set image.tag=ct
-validate-maintainers: false

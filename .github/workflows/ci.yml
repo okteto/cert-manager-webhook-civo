@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-push-image:
+  build-and-test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -13,8 +13,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
+          # ct needs history to compare
           fetch-depth: 0
 
       - name: Build and push Docker image
@@ -24,38 +25,52 @@ jobs:
           push: false
           tags: okteto/civo-webhook:ct
 
-      # REMOVING until https://github.com/kubernetes/kubernetes/pull/110351 makes it to release
-      # - name: Run Trivy vulnerability scanner
-      #  uses: aquasecurity/trivy-action@master
-      #  with:
-      #    image-ref: 'okteto/civo-webhook:ct'
-      #    format: 'table'
-      #    exit-code: '1'
-      #    ignore-unfixed: true
-      #    vuln-type: 'os,library'
-      #    severity: 'CRITICAL,HIGH'
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+         image-ref: 'okteto/civo-webhook:ct'
+         format: 'table'
+         exit-code: '1'
+         ignore-unfixed: true
+         vuln-type: 'os,library'
+         severity: 'CRITICAL,HIGH'
 
       - name: Install Helm
         uses: azure/setup-helm@v1
         with:
           version: v3.8.1
 
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v4
         with:
-          python-version: 3.7
+          python-version: '3.9'
+          check-latest: true
 
       - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.2.1
-        with:
-          version: v3.5.1
+        uses: helm/chart-testing-action@v2.4.0
 
-      
+      - name: Run chart-testing (list-changed)
+        id: list-changed
+        run: |
+          changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }} --chart-dirs chart)
+          if [[ -n "$changed" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+          exit 0
+
       - name: Run chart-testing (lint)
-        run: ct lint --config ct.yaml
+        if: steps.list-changed.outputs.changed == 'true'
+        run: ct lint --target-branch ${{ github.event.repository.default_branch }}
 
+      - name: Create kind cluster
+        if: steps.list-changed.outputs.changed == 'true'
+        uses: helm/kind-action@v1.8.0
+
+      - name: Run chart-testing (install)
+        if: steps.list-changed.outputs.changed == 'true'
+        run: ct install --target-branch ${{ github.event.repository.default_branch }}
 
       - name:  Publish dev chart
-        uses: rberrelleza/helm-oci-chart-releaser@09f8ddb3aed48c69251fe53aeddc5c3b21796682
+        uses: appany/helm-oci-chart-releaser@main
         with:
           name: cert-manager-webhook-civo
           repository: okteto/cert-manager-webhook-civo
@@ -66,10 +81,3 @@ jobs:
           registry_password: ${{ secrets.GITHUB_TOKEN }}
           update_dependencies: 'true'
           dry_run: 'true'
-          
-      #- name: Create kind cluster
-      #  uses: helm/kind-action@v1.2.0
-
-      #- name: Run chart-testing (install)
-      #  run: ct install --config ct.yaml
-
