@@ -73,6 +73,7 @@ spec:
           groupName: civo.webhook.okteto.com
           config:
             secretName: civo-secret
+            secretKey: api-key
 ```
 
 By default, the CIVO API token used will be obtained from the secret in the same namespace as the webhook.
@@ -106,6 +107,7 @@ spec:
           groupName: civo.webhook.okteto.com
           config:
             secretName: civo-secret
+            secretKey: api-key
 ```
 
 By default, the webhook doesn't have permissions to read secrets on all namespaces. To enable this, you'll need to provide your own service account.
@@ -145,7 +147,7 @@ spec:
 1. Code away!
 
 # Contributing
-If you want to get involved, we'd love to receive a pull request, issues, or an offer to help over at the [#KUBE100](https://app.slack.com/client/TKW8H5MBK/CMVCKMCN5) channel in the Civo-Community slack or at the [#Okteto](https://kubernetes.slack.com/messages/CM1QMQGS0/) channel in the Kubernetes slack.
+If you want to get involved, we'd love to receive a pull request, issues, or an offer to help. [Open an issue](https://github.com/okteto/cert-manager-webhook-civo/issues) to get started!
 
 Maintainers:
 - [Ramiro Berrelleza](https://twitter.com/rberrelleza)
