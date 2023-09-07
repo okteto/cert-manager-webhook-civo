@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-push-image:
+  build-and-test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -13,9 +13,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v3
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
@@ -48,13 +46,11 @@ jobs:
         with:
           version: v3.5.1
 
-      
       - name: Run chart-testing (lint)
         run: ct lint --config ct.yaml
 
-
       - name:  Publish dev chart
-        uses: rberrelleza/helm-oci-chart-releaser@09f8ddb3aed48c69251fe53aeddc5c3b21796682
+        uses: appany/helm-oci-chart-releaser@v0.4.1
         with:
           name: cert-manager-webhook-civo
           repository: okteto/cert-manager-webhook-civo
@@ -71,4 +67,3 @@ jobs:
 
       #- name: Run chart-testing (install)
       #  run: ct install --config ct.yaml
-
