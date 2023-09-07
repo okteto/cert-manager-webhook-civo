@@ -21,3 +21,4 @@ spec:
           groupName: civo.webhook.okteto.com
           config:
             secretName: civo-secret
+            secretKey: key
