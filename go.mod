@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/cert-manager/cert-manager v1.12.4
-	github.com/civo/civogo v0.3.4
+	github.com/civo/civogo v0.3.45
 	github.com/sirupsen/logrus v1.9.3
 	k8s.io/apimachinery v0.27.2
 	k8s.io/client-go v0.27.2
@@ -37,6 +37,7 @@ require (
 	github.com/google/cel-go v0.12.6 // indirect
 	github.com/google/gnostic v0.6.9 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 // indirect
