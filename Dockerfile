@@ -7,6 +7,7 @@ RUN apt update && \
         ca-certificates
 
 WORKDIR /usr/src/app
+RUN groupadd --gid 1000 app && useradd -u 1000 -g app app
 
 # used by the dev env
 RUN go install github.com/cespare/reflex@latest
@@ -19,7 +20,11 @@ COPY . .
 RUN --mount=type=cache,target=/root/.cache/go-build CGO_ENABLED=0 GOOS=linux go build -v -o webhook .
 
 FROM scratch
+
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=builder /usr/src/app/webhook /app/webhook
+COPY --chown=app:app --from=builder /usr/src/app/webhook /app/webhook
+USER app
 EXPOSE 443
 ENTRYPOINT ["/app/webhook"]
