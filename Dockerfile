@@ -7,7 +7,7 @@ RUN apt update && \
         ca-certificates
 
 WORKDIR /usr/src/app
-RUN groupadd --gid 1000 app && useradd -u 1000 -g app app
+RUN groupadd --gid 2000 app && useradd -u 1000 -g app app
 
 # used by the dev env
 RUN go install github.com/cespare/reflex@latest
