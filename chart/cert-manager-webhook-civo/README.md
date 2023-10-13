@@ -135,11 +135,17 @@ spec:
 | image.tag | string | `"0.5.0"` |  |
 | nameOverride | string | `""` | Override the name of the created resources |
 | nodeSelector | object | `{}` | Node labels for pod assignment |
-| podSecurityContext | object | `{}` | Optional pod context. The yaml block should adhere to the [PodSecurityContext spec](https://v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#securitycontext-v1-core) |
+| podSecurityContext.fsGroup | int | `3000` |  |
+| podSecurityContext.runAsGroup | int | `2000` |  |
+| podSecurityContext.runAsNonRoot | bool | `true` |  |
+| podSecurityContext.runAsUser | int | `1000` |  |
+| podSecurityContext.seccompProfile.type | string | `"RuntimeDefault"` |  |
 | region | string | `"NYC1"` | region on CIVO |
 | replicaCount | int | `1` | Number of webhook replicas |
 | resources | object | `{}` | CPU/memory resource requests/limits |
-| securityContext | object | `{}` | Optional security context. The yaml block should adhere to the [SecurityContext spec](https://v1-18.docs.kubernetes.io/docs/reference/generated/kubernetes-api/v1.18/#podsecuritycontext-v1-core) |
+| securityContext.allowPrivilegeEscalation | bool | `false` |  |
+| securityContext.capabilities.drop[0] | string | `"ALL"` |  |
+| securityContext.runAsNonRoot | bool | `true` |  |
 | service.port | int | `443` | port for the webhook API server |
 | service.type | string | `"ClusterIP"` | service type for the webhook API server |
 | serviceAccount.create | bool | `true` | If true, create a new service account |
