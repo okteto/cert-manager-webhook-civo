@@ -17,7 +17,9 @@ Follow the [instructions](https://cert-manager.io/docs/installation/) using the 
 
 #### From the GitHub registry
 
-helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo/cert-manager-webhook-civo --version 0.5.0
+> Experimental, share your feedback!
+
+helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo [--version 0.5.0]
 
 #### Using public helm chart
 
