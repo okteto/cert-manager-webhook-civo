@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: false
@@ -73,7 +73,7 @@ jobs:
         uses: appany/helm-oci-chart-releaser@main
         with:
           name: cert-manager-webhook-civo
-          repository: okteto/cert-manager-webhook-civo
+          repository: okteto
           tag: 0.0.0-${{ github.sha }}
           path: chart/cert-manager-webhook-civo 
           registry: ghcr.io
