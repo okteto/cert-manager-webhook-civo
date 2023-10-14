@@ -26,5 +26,5 @@ COPY --from=builder /etc/group /etc/group
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --chown=app:app --from=builder /usr/src/app/webhook /app/webhook
 USER app
-EXPOSE 443
+EXPOSE 8443
 ENTRYPOINT ["/app/webhook"]

@@ -29,3 +29,5 @@ chart
 
 # build output
 output
+
+cert-manager-webhook-civo-*.tgz
