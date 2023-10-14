@@ -1,6 +1,6 @@
 # cert-manager-webhook-civo
 
-![Version: 0.5.0](https://img.shields.io/badge/Version-0.5.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.5.0](https://img.shields.io/badge/AppVersion-0.5.0-informational?style=flat-square)
+![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.5.1](https://img.shields.io/badge/AppVersion-0.5.1-informational?style=flat-square)
 
 A webhook to use CIVO DNS as a DNS issuer for cert-manager
 
@@ -15,7 +15,7 @@ Follow the [instructions](https://cert-manager.io/docs/installation/) using the 
 > Experimental, share your feedback!
 
 ```bash
-helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo
+helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo --version 0.5.1
 ```
 
 #### From the public helm repository
@@ -23,7 +23,7 @@ helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook
 ```bash
 helm repo add okteto https://charts.okteto.com
 helm repo update
-helm install --namespace cert-manager cert-manager-webhook-civo okteto/cert-manager-webhook-civo
+helm install --namespace cert-manager cert-manager-webhook-civo okteto/cert-manager-webhook-civo --version 0.5.1
 ```
 ## Uninstalling
 
