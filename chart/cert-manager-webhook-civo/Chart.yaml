@@ -3,8 +3,8 @@ name: cert-manager-webhook-civo
 description: A webhook to use CIVO DNS as a DNS issuer for cert-manager
 home: https://github.com/okteto/cert-manager-webhook-civo
 type: application
-version: 0.5.0
-appVersion: 0.5.0
+version: "0.5.1"
+appVersion: "0.5.1"
 keywords:
 - cert-manager
 - letsencrypt
