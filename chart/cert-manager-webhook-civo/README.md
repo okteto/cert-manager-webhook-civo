@@ -10,14 +10,21 @@ A webhook to use CIVO DNS as a DNS issuer for cert-manager
 
 Follow the [instructions](https://cert-manager.io/docs/installation/) using the cert-manager documentation to install it within your cluster.
 
-### Webhook
+#### From the GitHub registry
+
+> Experimental, share your feedback!
+
+```bash
+helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo
+```
+
+#### From the public helm repository
 
 ```bash
 helm repo add okteto https://charts.okteto.com
 helm repo update
 helm install --namespace cert-manager cert-manager-webhook-civo okteto/cert-manager-webhook-civo
 ```
-
 ## Uninstalling
 
 To uninstall the webhook run
