@@ -3,7 +3,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/okteto/cert-manager-webhook-civo)](https://goreportcard.com/report/github.com/okteto/cert-manager-webhook-civo)
 [![Releases](https://img.shields.io/github/v/release/okteto/cert-manager-webhook-civo?include_prereleases)](https://github.com/okteto/cert-manager-webhook-civo/releases)
 [![LICENSE](https://img.shields.io/github/license/okteto/cert-manager-webhook-civo)](https://github.com/slicen/cert-manager-webhook-civo/blob/master/LICENSE)
-[![Artifact HUB](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/okteto)](https://artifacthub.io/packages/search?repo=okteto)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/cert-manager-webhook-civo)](https://artifacthub.io/packages/search?repo=cert-manager-webhook-civo)
 
 This solver can be used when you want to use  [cert-manager](https://github.com/jetstack/cert-manager) with [CIVO DNS](https://civo.com). 
 
