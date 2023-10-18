@@ -5,6 +5,7 @@
 **Release date:** 2023-10-17
 
 * include CHANGELOG file on the chart
+* update installation instructions to use the OCI registry
 
 ## 0.5.1 
 
