@@ -7,7 +7,7 @@ region: NYC1
 image:
   # -- Image repository
   repository: okteto/civo-webhook
-  tag: 0.5.2
+  tag:
 
   # -- Image pull policy
   pullPolicy: IfNotPresent
