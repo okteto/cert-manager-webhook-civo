@@ -1,5 +1,10 @@
 # Change Log
 
+## 0.5.3
+**Release date:** 2023-10-17
+
+* update instructions on the chart's README
+
 ## 0.5.2 
 
 **Release date:** 2023-10-17
