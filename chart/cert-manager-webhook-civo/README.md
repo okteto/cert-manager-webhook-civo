@@ -1,6 +1,6 @@
 # cert-manager-webhook-civo
 
-![Version: 0.5.1](https://img.shields.io/badge/Version-0.5.1-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.5.1](https://img.shields.io/badge/AppVersion-0.5.1-informational?style=flat-square)
+![Version: 0.5.2](https://img.shields.io/badge/Version-0.5.2-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.5.2](https://img.shields.io/badge/AppVersion-0.5.2-informational?style=flat-square)
 
 A webhook to use CIVO DNS as a DNS issuer for cert-manager
 
@@ -15,7 +15,7 @@ Follow the [instructions](https://cert-manager.io/docs/installation/) using the 
 > Experimental, share your feedback!
 
 ```bash
-helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo --version 0.5.1
+helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo --version 0.5.2
 ```
 
 #### From the public helm repository
@@ -23,7 +23,7 @@ helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook
 ```bash
 helm repo add okteto https://charts.okteto.com
 helm repo update
-helm install --namespace cert-manager cert-manager-webhook-civo okteto/cert-manager-webhook-civo --version 0.5.1
+helm install --namespace cert-manager cert-manager-webhook-civo okteto/cert-manager-webhook-civo --version 0.5.2
 ```
 ## Uninstalling
 
@@ -139,7 +139,7 @@ spec:
 | groupName | string | `"civo.webhook.okteto.com"` | groupName for the webhook, issuers and clusterIssuers must match this |
 | image.pullPolicy | string | `"IfNotPresent"` | Image pull policy |
 | image.repository | string | `"okteto/civo-webhook"` | Image repository |
-| image.tag | string | `"0.5.0"` |  |
+| image.tag | string | `"0.5.2"` |  |
 | nameOverride | string | `""` | Override the name of the created resources |
 | nodeSelector | object | `{}` | Node labels for pod assignment |
 | podSecurityContext.fsGroup | int | `3000` |  |
