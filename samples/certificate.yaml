@@ -3,10 +3,10 @@ kind: Certificate
 metadata:
   name: example-cert
 spec:
-  commonName: "*.civo.okteto.net"
+  commonName: "*.example.com"
   dnsNames:
-  - "*.civo.okteto.net" # REPLACE THIS WITH YOUR DOMAIN
+  - "*.example.com" # REPLACE THIS WITH YOUR DOMAIN
   issuerRef:
    name: letsencrypt-staging
-   kind: ClusterIssuer
+   kind: Issuer
   secretName: example-cert
