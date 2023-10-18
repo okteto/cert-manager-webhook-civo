@@ -13,30 +13,21 @@ This solver can be used when you want to use  [cert-manager](https://github.com/
 
 Follow the [instructions](https://cert-manager.io/docs/installation/) using the cert-manager documentation to install it within your cluster.
 
-### Webhook
+### cert-manager-webhook-civo
 
-#### From the GitHub registry
-
-> Experimental, share your feedback!
 
 ```bash
 helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo [--version 0.5.2]
 ```
 
-#### Using public helm chart
-
-```bash
-helm repo add okteto https://charts.okteto.com
-helm repo update
-helm install --namespace cert-manager cert-manager-webhook-civo okteto/cert-manager-webhook-civo [--version 0.5.2]
-```
-
-#### From local checkout
+### From local checkout
 
 ```bash
 helm install --namespace cert-manager cert-manager-webhook-civo chart/cert-manager-webhook-civo
 ```
 **Note**: The kubernetes resources used to install the Webhook should be deployed within the same namespace as the cert-manager.
+
+### Uninstalling 
 
 To uninstall the webhook run
 ```bash
