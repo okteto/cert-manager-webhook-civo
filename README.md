@@ -72,7 +72,7 @@ spec:
           groupName: civo.webhook.okteto.com
           config:
             secretName: civo-secret
-            secretKey: api-key
+            secretKey: key
 ```
 
 By default, the CIVO API token used will be obtained from the secret in the same namespace as the webhook.
@@ -106,7 +106,7 @@ spec:
           groupName: civo.webhook.okteto.com
           config:
             secretName: civo-secret
-            secretKey: api-key
+            secretKey: key
 ```
 
 By default, the webhook doesn't have permissions to read secrets on all namespaces. To enable this, you'll need to provide your own service account.

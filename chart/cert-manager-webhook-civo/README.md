@@ -30,7 +30,7 @@ helm uninstall --namespace cert-manager cert-manager-webhook-civo
 In order to access the CIVO API, the webhook needs an [API token](https://www.civo.com/account/security).
 
 ```
-kubectl create secret generic civo-secret --from-literal=api-key=<YOUR_CIVO_TOKEN>
+kubectl create secret generic civo-secret --from-literal=key=<YOUR_CIVO_TOKEN>
 ```
 
 ### Create Issuer
