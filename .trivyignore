@@ -1,0 +1,2 @@
+# ignore CVE-2023-45142 until https://github.com/cert-manager/cert-manager publishes a fix
+CVE-2023-45142
