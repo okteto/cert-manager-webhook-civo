@@ -20,7 +20,7 @@ Follow the [instructions](https://cert-manager.io/docs/installation/) using the 
 > Experimental, share your feedback!
 
 ```bash
-helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo [--version 0.5.0]
+helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo [--version 0.5.2]
 ```
 
 #### Using public helm chart
@@ -28,7 +28,7 @@ helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook
 ```bash
 helm repo add okteto https://charts.okteto.com
 helm repo update
-helm install --namespace cert-manager cert-manager-webhook-civo okteto/cert-manager-webhook-civo [--version 0.5.0]
+helm install --namespace cert-manager cert-manager-webhook-civo okteto/cert-manager-webhook-civo [--version 0.5.2]
 ```
 
 #### From local checkout
@@ -49,7 +49,7 @@ helm uninstall --namespace cert-manager cert-manager-webhook-civo
 In order to access the CIVO API, the webhook needs an [API token](https://www.civo.com/account/security).
 
 ```
-kubectl create secret generic civo-secret --from-literal=api-key=<YOUR_CIVO_TOKEN>
+kubectl create secret generic civo-secret --from-literal=key=<YOUR_CIVO_TOKEN>
 ```
 
 ### Create Issuer
