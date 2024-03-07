@@ -39,7 +39,7 @@ jobs:
         with:
           cache-source: go-build-cache
 
-      - name: Build and push Docker image
+      - name: Build Docker AMD64 image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -51,7 +51,7 @@ jobs:
           cache-to: type=gha,mode=max
       
       # we need to duplicate because the load param doesn't work when building multiarch images
-      - name: Build and push Docker image
+      - name: Build Docker ARM64 image
         uses: docker/build-push-action@v5
         with:
           context: .
