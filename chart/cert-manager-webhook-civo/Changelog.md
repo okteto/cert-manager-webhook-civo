@@ -1,16 +1,22 @@
 # Change Log
 
+## 0.5.4
+**Release date:** 2024-03-07
+
+* Support for ARM64 clusters
+* Build with go 1.22
+
 ## 0.5.3
 **Release date:** 2023-10-17
 
-* update instructions on the chart's README
+* Update instructions on the chart's README
 
 ## 0.5.2 
 
 **Release date:** 2023-10-17
 
-* include CHANGELOG file on the chart
-* update installation instructions to use the OCI registry
+* Include CHANGELOG file on the chart
+* Update installation instructions to use the OCI registry
 
 ## 0.5.1 
 
@@ -22,14 +28,14 @@
 
 **Release date:** 2023-10-13
 
-* update readme (#27) 
-* reduce redundancy on repo name (#26) 
-* update deps to latest version available (#25) 
-* feat: run as non-root user (#23) 
+* Update readme (#27) 
+* Reduce redundancy on repo name (#26) 
+* Update deps to latest version available (#25) 
+* Run as non-root user (#23) 
 
 ## 0.4.0 
 
 **Release date:** 2023-09-06
 
-* prep for 0.4.0 release (#17) 
+* 
 * 0.3.2 release (#15) 

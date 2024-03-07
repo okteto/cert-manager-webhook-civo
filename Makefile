@@ -23,9 +23,3 @@ chart:
 	helm package chart/cert-manager-webhook-civo --app-version ${TAG}
 	mkdir -p output
 	mv *.tgz output/
-
-release:
-	curl https://charts.okteto.com/index.yaml > old-index.yaml
-	helm repo index --merge old-index.yaml --url https://charts.okteto.com output
-	gsutil cp output/index.yaml gs://charts.okteto.com/
-	gsutil cp output/*.tgz gs://charts.okteto.com/
