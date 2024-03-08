@@ -8,7 +8,7 @@ on:
     branches: [main]
 
 jobs:
-  build-and-test:
+  build-image-and-test-chart:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -52,14 +52,13 @@ jobs:
       
       # we need to duplicate because the load param doesn't work when building multiarch images
       - name: Build Docker ARM64 image
-        uses: docker/build-push-action@v5
+        uses: depot/build-push-action@v1
         with:
           context: .
           push: false
+          project: fp03r38ggl
           platforms: linux/arm64
           tags: okteto/civo-webhook:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
