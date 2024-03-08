@@ -17,7 +17,7 @@ Follow the [instructions](https://cert-manager.io/docs/installation/) using the 
 
 
 ```bash
-helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo [--version 0.5.2]
+helm install cert-manager-webhook-civo oci://ghcr.io/okteto/cert-manager-webhook-civo [--version 0.5.4]
 ```
 
 ### From local checkout
